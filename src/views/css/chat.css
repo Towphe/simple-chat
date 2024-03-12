@@ -5,3 +5,102 @@
     - Lipstick - #AF1C1C
     - Turqoise - #31A2AC
 */
+
+main{
+    height: calc(100vh - 0.5em);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+#overlay{
+    display: none;
+    z-index: 5;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff6b;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+}
+
+#overlay > div{
+    text-align: center;
+}
+
+#chat-header{
+    width: 100vw;
+    height: 1.8em;
+    background-color: #2F2F28;
+}
+
+#chat-content{
+    width: 100vw;
+    height: calc(100% - 1.5em - 1.8em);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.message{
+    background-color: #2F2F28;
+    color: #F0EFFE;
+    width: 50vw;
+    padding: 0.8em 1.2em;
+    border-radius: 1.5em;
+    margin-bottom: 0.8em;
+    /* adjust depending if ingoing or outgoing */
+}
+
+.ingoing-message{
+    float:left;
+    margin-left: 0.35em;
+}
+
+.outgoing-message{
+    float: right;
+    margin-right: 0.35em;
+}
+
+.message > h3, p {
+    margin: 0;
+    text-align: justify;
+}
+
+#message-input{
+    display: block;
+    height: 1.5em;
+    width: calc(90vw - 2em);
+    font-size: 1.1em;
+}
+
+#send-message-button-img{
+    display: block;
+    height: 1.5em;
+}
+
+#chat-box{
+    width: 100vw;
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 0.5em;
+}
+
+@media only screen and (min-width: 680px){
+    #chat-box{
+        justify-content: center;
+    }
+    #message-input{
+        width: 60vw;
+    }
+}
+
+@media only screen and (min-width: 960px){
+    #message-input{
+        width: 45vw;
+    }
+}
+
+footer{
+    height: 0.5em;
+    background-color: #2F2F28;
+}

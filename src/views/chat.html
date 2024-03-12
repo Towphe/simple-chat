@@ -3,13 +3,29 @@
     <head>
         <title>Chat</title>
         <meta charset="UTF-8" />
-        <link href="site.css" rel="stylesheet" />
-        <link href="chat.css" rel="stylesheet" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+        <link href="css/site.css" rel="stylesheet" />
+        <link href="css/chat.css" rel="stylesheet" />
     </head>
     <body>
+        <div id="overlay">
+            <div>
+                <h2>Loading...</h2>
+            </div>
+        </div>
         <main>
-            <h1>Chat</h1>
-            <button type="button" id="send-message">Click me!</button>
+            <div id="chat-header">
+            </div>
+            <div id="chat-content">
+            </div>
+            <div id="chat-box">
+                <input type="text" name="message-input" id="message-input">
+                <button type="button" id="send-message-button">
+                    <svg id="send-message-button-img" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>  
+                </button>
+            </div>
         </main>
         <footer>
         </footer>
@@ -18,16 +34,91 @@
         <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
         <script>
             let socket = io();
-            
+            let val;
             // process
             // 1. pool users - find user to chat with
+            // find user first, activate messageing when another user is found
+            socket.on('user-matched', (arg) => {
+                console.log(arg);
+                val = arg;
+                if (arg == true){
+                    document.getElementById('overlay').style.display = 'none';
+                }
+            });
+
             // 2. create connection between users
                 // to make this work, user id and chat id must be implemented
             // 3. facilitate chats
             
-            document.getElementById('send-message').addEventListener('click', () =>{
-                socket.emit('clicked button', 'User clicked button.');
+            document.getElementById('send-message-button').addEventListener('click', () =>{
+                let message = document.getElementById('message-input').value;
+
+                if (message != ""){
+                    socket.emit('message sent', {
+                        author: socket.id,
+                        message: message
+                    });
+                    appendOutgoingMessage({
+                        author: socket.id,
+                        message: message
+                    });
+                }
             });
+
+            socket.on('relay message', async (msg) => {
+                if (socket.id != msg.author){
+                    console.log(msg);
+                    appendIngoingMessage(msg);
+                }
+            });
+            
+            // function that appends outgoing message
+            const appendOutgoingMessage = (msg) => {
+                const author = msg.author;
+                const message = msg.message;
+
+                const msgBody = document.createElement('div');
+                
+                let userName = document.createElement('h3');
+                userName.innerHTML = author;
+
+                let messageBody = document.createElement('p');
+                messageBody.innerHTML = message;
+
+                msgBody.classList.add('message');
+                msgBody.classList.add('outgoing-message');
+
+                msgBody.appendChild(userName);
+                msgBody.appendChild(messageBody);
+
+                const chatContent = document.getElementById('chat-content');
+
+                chatContent.appendChild(msgBody);
+            };
+            
+            // function that appends ingoing message
+            const appendIngoingMessage = (msg) => {
+                const author = msg.author;
+                const message = msg.message;
+
+                const msgBody = document.createElement('div');
+                
+                let userName = document.createElement('h3');
+                userName.innerHTML = author;
+
+                let messageBody = document.createElement('p');
+                messageBody.innerHTML = message;
+
+                msgBody.classList.add('message');
+                msgBody.classList.add('ingoing-message');
+
+                msgBody.appendChild(userName);
+                msgBody.appendChild(messageBody);
+
+                const chatContent = document.getElementById('chat-content');
+
+                chatContent.appendChild(msgBody);
+            }
 
         </script>
     </body>
