@@ -5,6 +5,10 @@
     - Lipstick - #AF1C1C
     - Turqoise - #31A2AC
 */
+html{
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.05rem;
+}
 
 body{
     margin: 0;
@@ -13,4 +17,13 @@ body{
     height: auto;
     background-color: #F0EFFE;
     color: #2F2F28;
+}
+
+main{
+    height: calc(100vh - 2em);
+}
+
+footer{
+    height: 2em;
+    background-color: #AF1C1C;
 }

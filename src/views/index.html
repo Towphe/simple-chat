@@ -3,8 +3,24 @@
     <head>
         <title>Simple Chat</title>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/index.css" rel="stylesheet">
+        <link href="css/site.css" rel="stylesheet">
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <main>
+            <div>
+                <h1>Chat.ly</h1>
+                <p>Get to know others!</p>
+                <button id="new-chat-button">Start new Chat!</button>
+            </div>
+        </main>
+        <footer>
+        </footer>
+        <script>
+            document.getElementById('new-chat-button').addEventListener('click', () =>{
+                window.location.href = '/chat';
+            });
+        </script>
     </body>
 </html>
