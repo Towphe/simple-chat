@@ -1,0 +1,16 @@
+/*
+    color combination
+    - Grayish White - #F0EFFE
+    - Black - #2F2F28
+    - Lipstick - #AF1C1C
+    - Turqoise - #31A2AC
+*/
+
+body{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: auto;
+    background-color: #F0EFFE;
+    color: #2F2F28;
+}
