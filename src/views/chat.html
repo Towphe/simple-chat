@@ -10,7 +10,7 @@
     <body>
         <div id="overlay">
             <div>
-                <h2>Loading...</h2>
+                <h2 id="overlay-msg">Loading...</h2>
             </div>
         </div>
         <main>
@@ -34,44 +34,62 @@
         <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
         <script>
             let socket = io();
-            let val;
+
             // process
             // 1. pool users - find user to chat with
             // find user first, activate messageing when another user is found
-            socket.on('user-matched', (arg) => {
-                console.log(arg);
-                val = arg;
-                if (arg == true){
-                    document.getElementById('overlay').style.display = 'none';
-                }
-            });
-
             // 2. create connection between users
                 // to make this work, user id and chat id must be implemented
             // 3. facilitate chats
-            
+
+            // possible improvements for v3.0
+            // - instead of simply getting from top of stack, randomize
+
+            let matched = null;
+
+            socket.on('user matched', (matchedId) => {
+                matched = matchedId;
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('chat-content').replaceChildren();
+                console.log(matchedId);
+            });
+
+            socket.on('pair disconnected', () => {
+                document.getElementById('overlay').style.display = 'flex';
+                document.getElementById('overlay-msg').innerHTML = 'User disconnected. Queueing for new chat...';
+            });
+
+            // this only emits when button is clicked.
             document.getElementById('send-message-button').addEventListener('click', () =>{
                 let message = document.getElementById('message-input').value;
-
                 if (message != ""){
                     socket.emit('message sent', {
                         author: socket.id,
+                        to: matched,
                         message: message
                     });
                     appendOutgoingMessage({
                         author: socket.id,
+                        to: matched,
                         message: message
                     });
                 }
             });
+            
+            socket.on('chat created', (arg) => {
+                console.log('chat created');
+                document.getElementById('overlay').style.display = 'none';
+            })
 
-            socket.on('relay message', async (msg) => {
+            // receives messages
+            socket.on('relay message', (msg) => {
                 if (socket.id != msg.author){
                     console.log(msg);
                     appendIngoingMessage(msg);
                 }
             });
             
+            // utility functions
             // function that appends outgoing message
             const appendOutgoingMessage = (msg) => {
                 const author = msg.author;

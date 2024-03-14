@@ -14,7 +14,7 @@ main{
 }
 
 #overlay{
-    display: none;
+    display: flex;
     z-index: 5;
     width: 100vw;
     height: 100vh;
